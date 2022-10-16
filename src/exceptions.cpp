@@ -3,5 +3,5 @@
 CompilerException::CompilerException(const char* msg): m_message(msg) {}
 
 const char *CompilerException::what() {
-    return m_message;
+    return m_message.c_str();
 }

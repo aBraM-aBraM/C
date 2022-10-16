@@ -1,10 +1,11 @@
 #include <exception>
-#include <string_view>
+#include <string>
+
 
 class CompilerException : std::exception {
 public:
     explicit CompilerException(const char* msg);
     const char* what();
 private:
-    const char* m_message;
+    const std::string m_message;
 };

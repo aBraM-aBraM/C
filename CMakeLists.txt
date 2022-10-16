@@ -7,6 +7,7 @@ add_compile_options(-std=c++2a)
 
 set(SRC
         src/exceptions.cpp
+        src/token.cpp
         src/lexer.cpp
         )
 

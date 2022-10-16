@@ -1,5 +1,7 @@
 set(TEST_SRC
-        test_hello_world.cpp)
+        test_lexer.cpp
+        test_parser.cpp
+        runner.cpp)
 
 add_executable(tests ${TEST_SRC})
 
@@ -9,5 +11,3 @@ target_link_libraries(tests PUBLIC
 target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 include(GoogleTest)
-
-gtest_discover_tests(tests)

@@ -40,7 +40,7 @@ TEST(UnitTests, TestHelloWorld) {
         ASSERT_TRUE(contains_tokens(*tokens, SINGLE_OPERATORS));
         ASSERT_TRUE(contains_tokens(*tokens, KEYWORDS));
         ASSERT_TRUE(contains_token(*tokens, {TOKEN_TYPE::STRING, "expected_string"}));
-        ASSERT_TRUE(contains_token(*tokens, {TOKEN_TYPE::CHAR, 'f'}));
+        ASSERT_TRUE(contains_token(*tokens, {TOKEN_TYPE::CHARACTER, 'f'}));
         ASSERT_TRUE(contains_token(*tokens, {TOKEN_TYPE::INTEGER, 1355}));
         ASSERT_TRUE(contains_token(*tokens, {TOKEN_TYPE::IDENTIFIER, "my_str"}));
         // TODO: figure out how to test comments

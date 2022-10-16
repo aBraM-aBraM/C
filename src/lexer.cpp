@@ -5,19 +5,21 @@
 #include <iostream>
 #include <span>
 #include "lexer.h"
+#include "token.h"
+
 
 std::unique_ptr<std::vector<Token>> Lexer::lex(std::istream &file_to_lex) {
     m_tokens = std::make_unique<std::vector<Token>>();
 
     std::string line;
     while (std::getline(file_to_lex, line)) {
-        parse_line(line);
+        lex_line(line);
     }
 
     return std::move(m_tokens);
 }
 
-void Lexer::parse_line(std::string_view statement) {
+void Lexer::lex_line(std::string_view statement) {
 
     auto it = statement.begin();
     while (it < statement.end()) {
@@ -33,9 +35,7 @@ void Lexer::parse_line(std::string_view statement) {
         stride = stride == 0 ? scan_literal_int(statement, it): stride;
         stride = stride == 0 ? scan_keyword_identifier(statement, it): stride;
 
-        if (stride == 0) {
-            stride = 1;
-        }
+        stride = stride == 0 ? 1: stride;
         it += stride;
     }
 }
@@ -51,3 +51,4 @@ bool Lexer::scan_token(std::string_view possible_token, const std::map<std::stri
     return false;
 
 }
+

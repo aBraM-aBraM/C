@@ -10,132 +10,22 @@
 
 #include "macros.h"
 #include "exceptions.h"
-
-enum class TOKEN_TYPE {
-    IF,
-    EQ,
-    OR,
-    FOR,
-    INT,
-    GEQ,
-    LEQ,
-    AND,
-    AMP,
-    MOD,
-    BREAK,
-    CONTINUE,
-    ADD,
-    SUB,
-    DIV,
-    LOR,
-    LAND,
-    DOT,
-    NEQ,
-    LESS,
-    PIPE,
-    BANG,
-    STAR,
-    ELSE,
-    FUNC,
-    CHAR,
-    EMPTY,
-    WHILE,
-    GREAT,
-    COMMA,
-    COLON,
-    INPUT,
-    PRINT,
-    ASSIGN,
-    ADDRESSOF,
-    DEREF,
-    RBRACE,
-    LBRACE,
-    STRING,
-    RETURN,
-    INTEGER,
-    LPARENS,
-    RPARENS,
-    LBRACKET,
-    RBRACKET,
-    SEMICOLON,
-    CHARACTER,
-    IDENTIFIER,
-    VOID
-};
-
-const std::map<std::string, TOKEN_TYPE> KEYWORDS = {
-
-        {"if",       TOKEN_TYPE::IF},
-        {"else",     TOKEN_TYPE::ELSE},
-        {"input",    TOKEN_TYPE::INPUT},
-        {"while",    TOKEN_TYPE::WHILE},
-        {"print",    TOKEN_TYPE::PRINT},
-        {"return",   TOKEN_TYPE::RETURN},
-        {"break",    TOKEN_TYPE::BREAK},
-        {"continue", TOKEN_TYPE::CONTINUE},
-
-        // Types
-        {"int",      TOKEN_TYPE::INT},
-        {"char",     TOKEN_TYPE::CHAR},
-        {"void",     TOKEN_TYPE::VOID},
-
-
-};
-
-constexpr int COMPOUND_OPERATOR_SIZE = 2;
-const std::map<std::string, TOKEN_TYPE> COMPOUND_OPERATORS = {
-
-        // Dual Character Operators
-        {"==", TOKEN_TYPE::EQ},
-        {"!=", TOKEN_TYPE::NEQ},
-        {"<=", TOKEN_TYPE::LEQ},
-        {">=", TOKEN_TYPE::GEQ},
-        {"&&", TOKEN_TYPE::LAND},
-        {"||", TOKEN_TYPE::LOR},
-};
-
-constexpr int SINGLE_OPERATOR_SIZE = 1;
-const std::map<std::string, TOKEN_TYPE> SINGLE_OPERATORS = {
-        // Single Character Operators @NOTE : We don't insert '/' here as it needs to be check for start-of-comment use before being able to assert if its an operator. 
-        {"+", TOKEN_TYPE::ADD},
-        {"-", TOKEN_TYPE::SUB},
-        {"*", TOKEN_TYPE::STAR},
-        {"/", TOKEN_TYPE::DIV},
-        {"%", TOKEN_TYPE::MOD},
-        {"=", TOKEN_TYPE::ASSIGN},
-        {"!", TOKEN_TYPE::BANG},
-        {"&", TOKEN_TYPE::AMP},
-        {"<", TOKEN_TYPE::LESS},
-        {">", TOKEN_TYPE::GREAT},
-        {"|", TOKEN_TYPE::PIPE},
-//        {".", TOKEN_TYPE::DOT},
-        {",", TOKEN_TYPE::COMMA},
-//        {":", TOKEN_TYPE::COLON},
-        {"(", TOKEN_TYPE::LPARENS},
-        {")", TOKEN_TYPE::RPARENS},
-        {"[", TOKEN_TYPE::LBRACKET},
-        {"]", TOKEN_TYPE::RBRACKET},
-        {"{", TOKEN_TYPE::LBRACE},
-        {"}", TOKEN_TYPE::RBRACE},
-        {";", TOKEN_TYPE::SEMICOLON},
-};
+#include "token.h"
 
 constexpr std::string_view LINE_COMMENT = "//";
 constexpr char STRING_DELIMITER = '"';
 constexpr char CHAR_DELIMITER = '\'';
 constexpr int CHAR_EXPRESSION_LENGTH = 3; // <delimiter><char><delimiter>
 
-struct Token {
-    TOKEN_TYPE m_type;
-    std::variant<int, std::string, char> m_value;
-};
+
+
 
 class Lexer {
 public:
     std::unique_ptr<std::vector<Token>> lex(std::istream &file_to_lex);
 
 private:
-    void parse_line(std::string_view statement);
+    void lex_line(std::string_view statement);
 
     bool scan_token(std::string_view possible_token, const std::map<std::string, TOKEN_TYPE> &search_tokens);
 
@@ -215,7 +105,7 @@ private:
                 }
                 char char_token = *(it + 1);
                 DEBUG_MSG("char token: '" << std::string(1, char_token) << "'");
-                m_tokens->push_back({TOKEN_TYPE::CHAR, char_token});
+                m_tokens->push_back({TOKEN_TYPE::CHARACTER, char_token});
                 return CHAR_EXPRESSION_LENGTH;
             }
         }
